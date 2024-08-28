@@ -15,15 +15,14 @@ def get_last_id_from_endpoint(endpoint_url):
         response = requests.get(endpoint_url)
         response.raise_for_status()
         data = response.json()
+        lista_id = []
+        for list in data:
+            newid=int(list['id'])
+            lista_id.append(newid)
+        maior_id = max(lista_id,default=0)
+         
 
-        if isinstance(data, list) and data:
-            ids = map(lambda item: item.get('id'), data)
-            valid_ids = filter(lambda x: isinstance(x, int), ids)
-            last_id = max(valid_ids, default=0)
-        else:
-            last_id = 0  # Caso não haja dados válidos ou a lista esteja vazia
-
-        return last_id + 1  # Retornar o próximo ID
+        return int(maior_id) + 1  # Retornar o próximo ID
 
     except requests.RequestException as e:
         print(f"Erro ao obter o último ID do endpoint: {e}")
@@ -98,3 +97,5 @@ if __name__ == "__main__":
     if data:
         
         send_data_to_endpoint(data, endpoint_url)
+        
+
